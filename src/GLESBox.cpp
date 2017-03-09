@@ -3,11 +3,9 @@ using namespace std;
 
 #include <string.h>
 
+#include "gbox/Environment.h"
+#include "gbox/Application.h"
 #include "log/Log.h"
-#include "core/memory.h"
-
-#include "Application.h"
-
 
 void configureNotify(int width, int height){
 	LOGI("configureNotify(%d:%d)", width, height);
@@ -35,20 +33,21 @@ void update(float deltaTime){
 void draw(){
 }
 
-int main() {
+int gbox_main(gbox::Environment* env) {
 
-	Application app;
-	Application::CallBackHolder& env = app.getCallBackHolder();
+	gbox::CallBackHolder* holder = env->getCallBackHolder();
 
-	env.configureNotify = &configureNotify;
-	env.buttonPress = &buttonPress;
-	env.buttonRelease = &buttonRelease;
-	env.motionNotify = &motionNotify;
-	env.destroyNotify = &destroyNotify;
-	env.update = &update;
-	env.draw = &draw;
+	holder->configureNotify = &configureNotify;
+	holder->buttonPress = &buttonPress;
+	holder->buttonRelease = &buttonRelease;
+	holder->motionNotify = &motionNotify;
+	holder->destroyNotify = &destroyNotify;
+	holder->update = &update;
+	holder->draw = &draw;
 
-	if(app.init("GLESBox", 640, 480)){
+	gbox::Application app(env);
+
+	if(app.init()){
 		app.mainLoop();
 	}
 

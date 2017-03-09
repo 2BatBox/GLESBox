@@ -1,27 +1,25 @@
 #include "files.h"
 
-#include "../io/FIStream.h"
-#include "../io/ISReader.h"
-#include "../io/FOStream.h"
-#include "../io/OSWriter.h"
+#include "../fio/FileWriter.h"
+#include "../fio/RawInputFile.h"
+#include "../fio/FileReader.h"
+#include "../fio/RawOutputFile.h"
 #include "../memory.h"
 
-core::Array<char> core::loadFile(const char* fileName) throw (IOException, EOFException) {
-	FIStream fistream(fileName);
-	ISReader isreader(fistream);
-	isreader.open();
-	size_t fileSize = fistream.getSize();
+#include <memory>
+
+core::Array<char> core::loadFile(const char* fileName) throw (FIOException, EOFException) {
+	std::unique_ptr<InputFile> inputFile(RawInputFile::open(fileName));
+	FileReader reader(inputFile.get());
+	size_t fileSize = inputFile->getSize();
 	AutoArray<char> array(new char[fileSize], fileSize);
-	isreader.readFully(*array, array.size);
-	isreader.close();
+	reader.readFully(*array, array.size);
 	return array.takeAway();
 }
 
-void core::saveFile(const char* fileName, const Array<char>& array) throw (IOException, EOFException) {
-	FOStream fostream(fileName);
-	OSWriter writer(fostream);
-	writer.open();
+void core::saveFile(const char* fileName, const Array<char>& array) throw (FIOException) {
+	std::unique_ptr<OutputFile> outputFile(RawOutputFile::open(fileName));
+	FileWriter writer(outputFile.get());
 	writer.writeFully(*array, array.size);
-	writer.close();
 }
 

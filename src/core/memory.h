@@ -31,11 +31,6 @@ public:
 		return array + index;
 	}
 
-	Array subArray(size_t offset) const throw (std::out_of_range) {
-		checkRange(offset);
-		return Array(array + offset, size - offset);
-	}
-
 protected:
 	T* array;
 
@@ -43,6 +38,7 @@ protected:
 		if (index >= 0 && index < size) {
 			return;
 		}
+		// todo: index info
 		throw std::out_of_range("core::Array");
 	}
 
