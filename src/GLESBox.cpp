@@ -69,6 +69,8 @@ void onContextCreate() {
 	GLint program = gbox::glutils::createProgram(shaderVertex, shaderFragment);
 	assert(program);
 
+	gbox::glutils::infoProgram(program);
+
 	GL_CHECK(glUseProgram(program));
 
 	locUniTime = GL_CHECK(glGetUniformLocation(program, "uTime"));
