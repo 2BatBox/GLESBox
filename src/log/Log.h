@@ -21,7 +21,7 @@
 #define LOGI(...) printf(__VA_ARGS__); printf("\n");
 #define LOGW(...) printf(__VA_ARGS__); printf("\n");
 #define LOGE(...) { \
-	((void)printf("**** ERROR **** IN %s:%d\n\t", __FILE__, __LINE__)); \
+	((void)printf("**** ERROR **** IN %s: %s() : line %d\n\t", __FILE__, __FUNCTION__, __LINE__)); \
 	((void)printf(__VA_ARGS__));\
 	printf("\n"); \
 }
